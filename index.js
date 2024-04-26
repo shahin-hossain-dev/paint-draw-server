@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
+const { MongoClient, ServerApiVersion } = require("mongodb");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -14,7 +15,6 @@ const userName = process.env.DB_USER;
 const password = process.env.DB_PASSWORD;
 // mongoDB Operation
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
 const uri = `mongodb+srv://${userName}:${password}@cluster0.kdwhpbt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -31,9 +31,13 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
-    app.post("/craft-items", (req, res) => {
+    const craftsCollection = client.db("craftDB").collection("crafts");
+
+    app.post("/crafts", async (req, res) => {
       const craftItem = req.body;
-      console.log(craftItem);
+      const result = await craftsCollection.insertOne(craftItem);
+
+      res.send(result);
     });
 
     // Send a ping to confirm a successful connection
