@@ -40,6 +40,13 @@ async function run() {
       res.send(cursor);
     });
 
+    // get specific 6 craft for home page showing items
+    app.get("/crafts/some-data", async (req, res) => {
+      const cursor = await craftsCollection.find().toArray();
+      const result = cursor.slice(0, 6);
+      res.send(result);
+    });
+
     // get single craft item
     app.get("/craft/:id", async (req, res) => {
       const id = req.params.id;
