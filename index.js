@@ -40,6 +40,19 @@ async function run() {
       res.send(cursor);
     });
 
+    //get specific data with user email
+
+    app.get("/my-crafts", async (req, res) => {
+      const email = req.query.email;
+      let query = {};
+      if (email) {
+        query = { email };
+      }
+      const cursor = await craftsCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
     // get specific 6 craft for home page showing items
     app.get("/crafts/some-data", async (req, res) => {
       const cursor = await craftsCollection.find().toArray();
