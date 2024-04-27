@@ -75,6 +75,50 @@ async function run() {
       res.send(result);
     });
 
+    // update craft item
+    app.put("/craft/:id", async (req, res) => {
+      const id = req.params.id;
+      const {
+        craftName,
+        shortDescription,
+        email,
+        userName,
+        price,
+        rating,
+        imageURL,
+        subcategory_name,
+        stockStatus,
+        customization,
+        processingTime,
+      } = req.body;
+      // filter which will be update by id
+      const filter = { _id: new ObjectId(id) };
+      const option = { upsert: true };
+      // update doc for update in database
+      const updateCraft = {
+        $set: {
+          craftName,
+          shortDescription,
+          email,
+          userName,
+          price,
+          rating,
+          imageURL,
+          subcategory_name,
+          stockStatus,
+          customization,
+          processingTime,
+        },
+      };
+      // update to database
+      const result = await craftsCollection.updateOne(
+        filter,
+        updateCraft,
+        option
+      );
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
