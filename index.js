@@ -31,7 +31,11 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
+    // database collection
     const craftsCollection = client.db("craftDB").collection("crafts");
+    const craftCategoryCollection = client
+      .db("craftDB")
+      .collection("craftCategory");
 
     // get craft items
     app.get("/crafts", async (req, res) => {
@@ -126,6 +130,13 @@ async function run() {
       const query = { _id: new ObjectId(id) };
       const result = await craftsCollection.deleteOne(query);
       res.send(result);
+    });
+
+    // craft category collection get data from database
+
+    app.get("/craft-categories", async (req, res) => {
+      const cursor = await craftCategoryCollection.find().toArray();
+      res.send(cursor);
     });
 
     // Send a ping to confirm a successful connection
