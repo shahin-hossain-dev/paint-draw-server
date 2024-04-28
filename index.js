@@ -36,6 +36,9 @@ async function run() {
     const craftCategoryCollection = client
       .db("craftDB")
       .collection("craftCategory");
+    const askQuestionCollection = client
+      .db("craftDB")
+      .collection("frequentlyAskQuestion");
 
     // get craft items
     app.get("/crafts", async (req, res) => {
@@ -52,9 +55,9 @@ async function run() {
       if (email) {
         query = { email };
       }
-      const cursor = await craftsCollection.find(query);
-      const result = await cursor.toArray();
-      res.send(result);
+      const cursor = await craftsCollection.find(query).toArray();
+
+      res.send(cursor);
     });
 
     // get specific 6 craft for home page showing items
@@ -146,6 +149,13 @@ async function run() {
 
       const query = { subcategory_name: category };
       const result = await craftsCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    // get Frequently Ask Question data from database
+
+    app.get("/ask-questions", async (req, res) => {
+      const result = await askQuestionCollection.find().toArray();
       res.send(result);
     });
 
