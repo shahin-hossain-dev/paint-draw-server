@@ -139,6 +139,16 @@ async function run() {
       res.send(cursor);
     });
 
+    // get category match craft data
+
+    app.get("/craft-category/:category", async (req, res) => {
+      const category = req.params.category;
+
+      const query = { subcategory_name: category };
+      const result = await craftsCollection.find(query).toArray();
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
